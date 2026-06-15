@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATL Shop — Nos Services</title>
+  <link rel="icon" href="https://placehold.co/32x32/c92a2a/fff?text=A" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <img src="/public/images/Atl logo.jpg" alt="ATL Shop logo" class="brand-logo">
+      <span class="brand-name">ATL SHOP</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+      <a href="services.html" class="nav-link active"><i class="fa-solid fa-briefcase"></i> Services</a>
+      <a href="panier.html"   class="nav-link"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <a href="login.html"    id="nav-login-link"    class="nav-link" style="color:#fff;"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+      <a href="register.html" id="nav-register-link" class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+      <span id="nav-user-greet" style="display:none;"></span>
+      <a href="profil.html" id="nav-profil-link" class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user"></i> Mon profil</a>
+      <button id="nav-logout-btn" onclick="logout()" style="display:none;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+      <a href="panier.html" class="cart-nav-btn" aria-label="Panier">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cart-badge-nav">0</span>
+      </a>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Thème sombre">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="burger-btn" id="burger-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html"    class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+    <a href="services.html" class="nav-link active"><i class="fa-solid fa-briefcase"></i> Services</a>
+    <a href="panier.html"   class="nav-link"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    <a href="login.html"    class="nav-link"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+  </div>
+</nav>
+
+<!-- SERVICES PAGE -->
+<main>
+  <div class="services-page">
+
+    <!-- Hero -->
+    <div class="services-hero">
+      <h1>Nos <span>Services</span></h1>
+      <p>ATL SARL, votre partenaire de confiance en solution informatique et sécurité électronique au Cameroun. Expertise, professionnalisme et réactivité.</p>
+    </div>
+
+    <!-- Services grid -->
+    <section aria-label="Nos principaux services">
+      <div class="services-grid">
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-video" aria-hidden="true"></i></div>
+          <h3>Sécurité Électronique</h3>
+          <p>Installation et configuration de systèmes de vidéosurveillance professionnels. Caméras IP, dôme, bullet, solaires 4G, DVR, NVR et lecteurs biométriques. Surveillance 24h/24 de vos locaux, entrepôts et domiciles.</p>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-computer" aria-hidden="true"></i></div>
+          <h3>Vente de Matériel Informatique</h3>
+          <p>Large gamme d'équipements informatiques de qualité : ordinateurs complets (HP, Lenovo), laptops, moniteurs, claviers, souris, clés USB, cartes mémoire, disques durs internes et externes, anti-virus.</p>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i></div>
+          <h3>Maintenance Informatique</h3>
+          <p>Entretien préventif et correctif de votre parc informatique. Dépannage logiciel et matériel, nettoyage, mise à jour système, récupération de données, réinstallation Windows et optimisation des performances.</p>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+          <h3>Installation Électrique Domestique</h3>
+          <p>Pose et câblage électrique résidentiel et professionnel. Installation d'interrupteurs, prises, disjoncteurs, tableaux de distribution, rallonges, luminaires et lampadaires solaires pour une installation aux normes.</p>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+          <h3>Développement Web</h3>
+          <p>Conception et développement de sites web professionnels, e-commerce et applications web. Sites vitrines, boutiques en ligne, interfaces de gestion. Design moderne, responsive et optimisé pour les moteurs de recherche.</p>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <h3>Assistance Technique</h3>
+          <p>Support technique rapide et efficace, sur site ou à distance. Intervention prioritaire, diagnostic et résolution de pannes. Notre équipe réactive est disponible pour vous accompagner dans l'utilisation de vos équipements.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- About section -->
+    <section style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:36px;margin-top:16px;box-shadow:var(--shadow);">
+      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+        <span style="background:linear-gradient(135deg,#c92a2a,#e0692e);-webkit-background-clip:text;background-clip:text;color:transparent;">Qui sommes-nous ?</span>
+      </h2>
+      <p style="color:var(--text-muted);line-height:1.9;font-size:15px;max-width:800px;">
+        <strong style="color:var(--text);">ATL SARL</strong> est votre partenaire de confiance en solution informatique et en sécurité électronique.
+        Spécialisée dans l'installation de systèmes de vidéosurveillance, notre entreprise vous accompagne dans la protection
+        de vos biens et de vos espaces grâce à des équipements modernes, performants et adaptés à vos besoins.
+        <br><br>
+        Au-delà de la vidéosurveillance, ATL SARL met à votre disposition une large gamme de services couvrant la vente
+        de matériel informatique de qualité, l'installation électrique domestique, la maintenance et le dépannage informatique,
+        ainsi qu'une assistance technique rapide et efficace.
+        <br><br>
+        Grâce à notre expertise, notre professionnalisme et notre réactivité, nous offrons à nos clients des solutions
+        <strong style="color:var(--text);">fiables, durables et sur mesure</strong>.
+      </p>
+      <div style="display:flex;gap:16px;margin-top:24px;flex-wrap:wrap;">
+        <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-flex;padding:11px 24px;">
+          <i class="fa-solid fa-store"></i> Voir nos produits
+        </a>
+        <a href="tel:+237695100878" class="btn-outline" style="text-decoration:none;display:inline-flex;padding:11px 24px;">
+          <i class="fa-solid fa-phone"></i> Nous appeler
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ATL SHOP</h3>
+      <p>Votre partenaire en équipements professionnels.<br>Sécurité · Informatique · Électricité · Maintenance.</p>
+      <div class="footer-social" style="margin-top:16px;">
+        <a href="https://www.facebook.com/profile.php?id=61560901936482" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="695100878" class="social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="index.html">Accueil</a>
+      <a href="services.html">Nos Services</a>
+      <a href="panier.html">Mon Panier</a>
+      <a href="login.html">Connexion</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+237695100878"><i class="fa-solid fa-phone" style="margin-right:6px;"></i>+237 695 100 878</a>
+      <a href="mailto:contact@afrikaans.cm"><i class="fa-solid fa-envelope" style="margin-right:6px;"></i>contact@atlsarl.cm</a>
+      <a href="#"><i class="fa-solid fa-location-dot" style="margin-right:6px;"></i>Douala, Cameroun</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 ATL SHOP — Tous droits réservés · Douala, Cameroun</p></div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/panier.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  (function(){
+    const t = document.getElementById('dark-toggle');
+    if (localStorage.getItem('atl_dark') === 'true') { document.body.classList.add('dark'); if(t) t.innerHTML='<i class="fa-solid fa-sun"></i>'; }
+    if (t) t.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('atl_dark', document.body.classList.contains('dark'));
+      t.innerHTML = document.body.classList.contains('dark') ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+    const b = document.getElementById('burger-btn'), m = document.getElementById('mobile-menu');
+    if(b && m) b.addEventListener('click', () => { m.classList.toggle('open'); b.classList.toggle('active'); });
+  })();
+</script>
+</body>
+</html>

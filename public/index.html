@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ATL Shop — Votre partenaire en sécurité électronique, matériel informatique, électricité et maintenance au Cameroun.">
+  <title>ATL Shop — Accueil</title>
+  <link rel="icon" href="/images/logo.jpg" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar" role="navigation">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <img src="/images/logo.jpg" alt="ATL Shop logo" class="brand-logo" onerror="this.src='https://placehold.co/40x40/c92a2a/fff?text=A'">
+      <span class="brand-name">ATL SHOP</span>
+    </a>
+    <div class="nav-search">
+      <form id="nav-search-form" role="search">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="search" id="search-input" placeholder="Rechercher un produit…" aria-label="Rechercher">
+      </form>
+    </div>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link active"><i class="fa-solid fa-house"></i> Accueil</a>
+      <a href="services.html" class="nav-link"><i class="fa-solid fa-briefcase"></i> Services</a>
+      <a href="panier.html"   class="nav-link"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <a href="login.html"    id="nav-login-link"    class="nav-link" style="color:#fff;"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+      <a href="register.html" id="nav-register-link" class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+      <span id="nav-user-greet" style="display:none;"></span>
+      <a href="profil.html"   id="nav-profil-link"   class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user"></i> Mon profil</a>
+      <a href="admin.html"    id="nav-admin-link"    class="nav-link" style="color:var(--orange);display:none;"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+      <button id="nav-logout-btn" onclick="logout()" style="display:none;background:none;border:none;cursor:pointer;" class="nav-link" style="color:#fff;"><i class="fa-solid fa-right-from-bracket"></i> Déco.</button>
+      <a href="panier.html" class="cart-nav-btn" aria-label="Panier">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cart-badge-nav">0</span>
+      </a>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Thème"><i class="fa-solid fa-moon"></i></button>
+      <button class="burger-btn" id="burger-btn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html"    class="nav-link active"><i class="fa-solid fa-house"></i> Accueil</a>
+    <a href="services.html" class="nav-link"><i class="fa-solid fa-briefcase"></i> Services</a>
+    <a href="panier.html"   class="nav-link"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    <a href="login.html"    class="nav-link" id="mobile-login-link"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+    <a href="register.html" class="nav-link" id="mobile-register-link" style="display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+    <a href="profil.html"   class="nav-link" id="mobile-profil-link"   style="display:none;"><i class="fa-solid fa-user"></i> Mon Profil</a>
+    <a href="admin.html"    class="nav-link" id="mobile-admin-link"    style="display:none;"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+    <button onclick="logout()" class="nav-link" id="mobile-logout-link" style="background:none;border:none;cursor:pointer;display:none;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+  </div>
+</nav>
+
+<header class="hero-banner">
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ ATL SARL — Cameroun</p>
+    <h1 class="hero-title" id="hero-title">Votre partenaire en <span>sécurité &amp; technologie</span></h1>
+    <p class="hero-sub" id="hero-sub">Équipements professionnels, installation, maintenance et assistance technique au Cameroun.</p>
+  </div>
+  <div class="services-band">
+    <div class="services-track">
+      <div class="service-pill"><i class="fa-solid fa-video"></i> Vidéosurveillance</div>
+      <div class="service-pill"><i class="fa-solid fa-computer"></i> Matériel Informatique</div>
+      <div class="service-pill"><i class="fa-solid fa-bolt"></i> Installation Électrique</div>
+      <div class="service-pill"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</div>
+      <div class="service-pill"><i class="fa-solid fa-headset"></i> Assistance Technique</div>
+      <div class="service-pill"><i class="fa-solid fa-globe"></i> Développement Web</div>
+    </div>
+  </div>
+</header>
+
+<div class="atl-about">
+  <p><strong>ATL SARL</strong> est votre partenaire de confiance en solution informatique et sécurité électronique.
+  Spécialisée dans l'installation de systèmes de vidéosurveillance, notre entreprise vous accompagne dans la protection
+  de vos biens et espaces grâce à des équipements modernes, performants et adaptés à vos besoins.
+  Des solutions <strong>fiables, durables et sur mesure</strong>.</p>
+</div>
+
+<div class="main-search-wrap">
+  <div class="main-search-bar">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" id="search-input-main" placeholder="Rechercher dans tous les produits…" aria-label="Rechercher">
+  </div>
+</div>
+
+<main>
+  <div class="section-wrap">
+    <div id="categories-container" aria-live="polite"></div>
+    <div id="no-result" style="display:none;text-align:center;padding:60px 20px;color:var(--text-muted);">
+      <i class="fa-solid fa-box-open" style="font-size:48px;display:block;margin-bottom:16px;color:#ccc;"></i>
+      Aucun produit ne correspond à votre recherche.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ATL SHOP</h3>
+      <p id="footer-tagline">Sécurité · Informatique · Électricité · Maintenance</p>
+      <div class="footer-social" style="margin-top:16px;">
+        <a href="https://www.facebook.com/profile.php?id=61560901936482" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="index.html">Accueil</a>
+      <a href="services.html">Nos Services</a>
+      <a href="panier.html">Mon Panier</a>
+      <a href="register.html">Créer un compte</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <span id="footer-phone"><i class="fa-solid fa-phone" style="margin-right:6px;"></i>+237 695 100 878</span><br>
+      <span id="footer-email"><i class="fa-solid fa-envelope" style="margin-right:6px;"></i>contact@afrikaans.cm</span><br>
+      <span id="footer-city"><i class="fa-solid fa-location-dot" style="margin-right:6px;"></i>Douala, Cameroun</span>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 <strong>ATL SHOP</strong> — Tous droits réservés</p></div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/panier.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/script.js"></script>
+<script>
+  // Charger settings dynamiquement
+  apiGetSettings().then(s => {
+    if (s.footer_text && document.getElementById('footer-tagline'))
+      document.getElementById('footer-tagline').textContent = s.footer_text;
+    if (s.contact_phone) document.getElementById('footer-phone').innerHTML = '<i class="fa-solid fa-phone" style="margin-right:6px;"></i>' + s.contact_phone;
+    if (s.contact_email) document.getElementById('footer-email').innerHTML = '<i class="fa-solid fa-envelope" style="margin-right:6px;"></i>' + s.contact_email;
+    if (s.contact_city)  document.getElementById('footer-city').innerHTML  = '<i class="fa-solid fa-location-dot" style="margin-right:6px;"></i>' + s.contact_city;
+  }).catch(()=>{});
+</script>
+</body>
+</html>

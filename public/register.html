@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATL Shop — Créer un compte</title>
+  <link rel="icon" href="https://placehold.co/32x32/c92a2a/fff?text=A" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .register-card { max-width:460px; }
+
+    .register-steps {
+      display:flex; gap:0; margin-bottom:28px; position:relative;
+    }
+    .register-steps::before {
+      content:''; position:absolute; top:18px; left:10%; right:10%;
+      height:2px; background:rgba(255,255,255,.1); z-index:0;
+    }
+    .step {
+      flex:1; display:flex; flex-direction:column; align-items:center;
+      gap:6px; font-size:11px; color:rgba(255,255,255,.4); z-index:1;
+    }
+    .step-dot {
+      width:36px; height:36px; border-radius:50%;
+      background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.15);
+      display:flex; align-items:center; justify-content:center;
+      font-size:14px; color:rgba(255,255,255,.4);
+      transition:all .3s;
+    }
+    .step.active .step-dot {
+      background:linear-gradient(135deg,#c92a2a,#e0692e);
+      border-color:transparent; color:#fff;
+    }
+    .step.active { color:rgba(255,255,255,.85); }
+
+    .input-group { position:relative; margin-bottom:14px; }
+    .input-icon {
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      color:rgba(255,255,255,.3); font-size:14px; pointer-events:none;
+    }
+    .login-input.has-icon { padding-left:44px; }
+
+    .input-group .field-error {
+      font-size:11.5px; color:#fca5a5; margin-top:4px; padding-left:4px;
+      display:none;
+    }
+    .input-group.invalid .login-input { border-color:#f87171; }
+    .input-group.invalid .field-error { display:block; }
+    .input-group.valid .login-input { border-color:#4ade80; }
+
+    .password-toggle {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; color:rgba(255,255,255,.35); cursor:pointer;
+      font-size:14px; padding:4px; transition:color .2s;
+    }
+    .password-toggle:hover { color:rgba(255,255,255,.7); }
+
+    .strength-bar {
+      height:4px; border-radius:99px; margin-top:6px;
+      background:rgba(255,255,255,.08); overflow:hidden;
+    }
+    .strength-fill {
+      height:100%; border-radius:99px; width:0%; transition:width .4s, background .4s;
+    }
+    .strength-label { font-size:11px; color:rgba(255,255,255,.35); margin-top:3px; }
+
+    .checkbox-row {
+      display:flex; align-items:flex-start; gap:10px; margin-bottom:18px;
+      font-size:13px; color:rgba(255,255,255,.6); cursor:pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width:18px; height:18px; margin-top:1px; accent-color:var(--orange); flex-shrink:0;
+    }
+    .checkbox-row a { color:var(--orange); text-decoration:underline; }
+
+    .login-footer {
+      text-align:center; margin-top:18px;
+      font-size:13px; color:rgba(255,255,255,.4);
+    }
+    .login-footer a { color:var(--orange); font-weight:600; }
+    .login-footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body class="login-body">
+
+<div class="login-card register-card" role="main">
+
+  <!-- Brand -->
+  <div class="login-brand">
+    <a href="index.html" style="text-decoration:none;">
+      <div style="font-family:'Syne',sans-serif;font-size:38px;font-weight:800;background:linear-gradient(135deg,#c92a2a,#e0692e);-webkit-background-clip:text;background-clip:text;color:transparent;">ATL</div>
+    </a>
+    <p>Créer votre compte</p>
+  </div>
+
+  <!-- Étapes visuelles -->
+  <div class="register-steps" aria-hidden="true">
+    <div class="step active" id="step-1">
+      <div class="step-dot"><i class="fa-solid fa-user"></i></div>
+      <span>Identité</span>
+    </div>
+    <div class="step" id="step-2">
+      <div class="step-dot"><i class="fa-solid fa-lock"></i></div>
+      <span>Sécurité</span>
+    </div>
+    <div class="step" id="step-3">
+      <div class="step-dot"><i class="fa-solid fa-check"></i></div>
+      <span>Confirm.</span>
+    </div>
+  </div>
+
+  <!-- Erreur globale -->
+  <div id="register-error" class="login-error" role="alert" aria-live="assertive"></div>
+
+  <form id="register-form" novalidate>
+
+    <!-- Nom complet -->
+    <div class="input-group" id="group-nom">
+      <i class="fa-solid fa-id-card input-icon"></i>
+      <input type="text" id="inp-nom" class="login-input has-icon"
+             placeholder="Nom complet *" autocomplete="name"
+             aria-label="Nom complet" aria-required="true">
+      <div class="field-error" id="err-nom"></div>
+    </div>
+
+    <!-- Email -->
+    <div class="input-group" id="group-email">
+      <i class="fa-solid fa-envelope input-icon"></i>
+      <input type="email" id="inp-email" class="login-input has-icon"
+             placeholder="Adresse email *" autocomplete="email"
+             aria-label="Adresse email" aria-required="true">
+      <div class="field-error" id="err-email"></div>
+    </div>
+
+    <!-- Mot de passe -->
+    <div class="input-group" id="group-pwd">
+      <i class="fa-solid fa-lock input-icon"></i>
+      <input type="password" id="inp-pwd" class="login-input has-icon"
+             placeholder="Mot de passe * (min 6 car.)" autocomplete="new-password"
+             aria-label="Mot de passe" aria-required="true">
+      <button type="button" class="password-toggle" id="toggle-pwd" aria-label="Afficher/masquer le mot de passe">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+      <!-- Indicateur de force -->
+      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      <div class="strength-label" id="strength-label"></div>
+      <div class="field-error" id="err-pwd"></div>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="input-group" id="group-confirm">
+      <i class="fa-solid fa-lock input-icon"></i>
+      <input type="password" id="inp-confirm" class="login-input has-icon"
+             placeholder="Confirmer le mot de passe *" autocomplete="new-password"
+             aria-label="Confirmer le mot de passe" aria-required="true">
+      <button type="button" class="password-toggle" id="toggle-confirm" aria-label="Afficher/masquer">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+      <div class="field-error" id="err-confirm"></div>
+    </div>
+
+    <!-- CGU -->
+    <label class="checkbox-row">
+      <input type="checkbox" id="inp-cgu" aria-required="true">
+      <span>J'accepte les <a href="#" onclick="return false;">conditions d'utilisation</a> et la politique de confidentialité d'ATL Shop.</span>
+    </label>
+
+    <button type="submit" class="login-btn" id="register-btn">
+      <i class="fa-solid fa-user-plus"></i> CRÉER MON COMPTE
+    </button>
+  </form>
+
+  <div class="login-footer">
+    Déjà un compte ? <a href="login.html">Se connecter</a>
+    &nbsp;·&nbsp;
+    <a href="index.html"><i class="fa-solid fa-house"></i> Accueil</a>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/panier.js"></script>
+<script>
+  // Rediriger si déjà connecté
+  if (isLoggedIn()) window.location.href = 'profil.html';
+
+  /* ── Toggles mot de passe ─────── */
+  function initToggle(btnId, inputId) {
+    document.getElementById(btnId)?.addEventListener('click', () => {
+      const inp = document.getElementById(inputId);
+      const ico = document.querySelector(`#${btnId} i`);
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        ico.className = 'fa-solid fa-eye-slash';
+      } else {
+        inp.type = 'password';
+        ico.className = 'fa-solid fa-eye';
+      }
+    });
+  }
+  initToggle('toggle-pwd', 'inp-pwd');
+  initToggle('toggle-confirm', 'inp-confirm');
+
+  /* ── Indicateur de force ──────── */
+  document.getElementById('inp-pwd').addEventListener('input', function() {
+    const v = this.value;
+    const fill  = document.getElementById('strength-fill');
+    const label = document.getElementById('strength-label');
+    let score = 0;
+    if (v.length >= 6)              score++;
+    if (v.length >= 10)             score++;
+    if (/[A-Z]/.test(v))            score++;
+    if (/[0-9]/.test(v))            score++;
+    if (/[^A-Za-z0-9]/.test(v))    score++;
+
+    const levels = [
+      { pct:'0%',   bg:'transparent',                            txt:'' },
+      { pct:'25%',  bg:'linear-gradient(90deg,#ef4444,#f87171)', txt:'Faible' },
+      { pct:'50%',  bg:'linear-gradient(90deg,#f97316,#fb923c)', txt:'Moyen' },
+      { pct:'75%',  bg:'linear-gradient(90deg,#eab308,#facc15)', txt:'Bon' },
+      { pct:'100%', bg:'linear-gradient(90deg,#22c55e,#4ade80)', txt:'Excellent' }
+    ];
+    const lvl = levels[Math.min(score, 4)];
+    fill.style.width      = v ? lvl.pct : '0%';
+    fill.style.background = lvl.bg;
+    label.textContent     = v ? lvl.txt : '';
+
+    // Mise à jour étape visuelle
+    activateStep(v.length >= 6 ? 2 : 1);
+  });
+
+  /* ── Étapes ──────────────────── */
+  function activateStep(n) {
+    [1,2,3].forEach(i => {
+      const el = document.getElementById('step-' + i);
+      if (i <= n) el.classList.add('active');
+      else        el.classList.remove('active');
+    });
+  }
+
+  /* ── Validation champ ─────────── */
+  function setField(groupId, errId, msg) {
+    const g = document.getElementById(groupId);
+    const e = document.getElementById(errId);
+    if (msg) {
+      g.classList.add('invalid'); g.classList.remove('valid');
+      e.textContent = msg; e.style.display = 'block';
+      return false;
+    }
+    g.classList.remove('invalid'); g.classList.add('valid');
+    e.style.display = 'none';
+    return true;
+  }
+
+  /* ── Soumission ──────────────── */
+  document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const nom     = document.getElementById('inp-nom').value.trim();
+    const email   = document.getElementById('inp-email').value.trim();
+    const pwd     = document.getElementById('inp-pwd').value;
+    const confirm = document.getElementById('inp-confirm').value;
+    const cgu     = document.getElementById('inp-cgu').checked;
+    const errDiv  = document.getElementById('register-error');
+    const btn     = document.getElementById('register-btn');
+
+    let valid = true;
+
+    // Validation
+    valid &= setField('group-nom', 'err-nom',
+      !nom ? 'Le nom complet est requis.' :
+      nom.length < 2 ? 'Minimum 2 caractères.' : '');
+
+    valid &= setField('group-email', 'err-email',
+      !email ? "L'email est requis." :
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Format email invalide.' : '');
+
+    valid &= setField('group-pwd', 'err-pwd',
+      !pwd ? 'Le mot de passe est requis.' :
+      pwd.length < 6 ? 'Minimum 6 caractères.' : '');
+
+    valid &= setField('group-confirm', 'err-confirm',
+      !confirm ? 'Veuillez confirmer le mot de passe.' :
+      pwd !== confirm ? 'Les mots de passe ne correspondent pas.' : '');
+
+    if (!cgu) {
+      errDiv.textContent = '⚠️ Vous devez accepter les conditions d\'utilisation.';
+      errDiv.style.display = 'block';
+      valid = false;
+    } else {
+      errDiv.style.display = 'none';
+    }
+
+    if (!valid) return;
+
+    btn.disabled  = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Création en cours…';
+
+    let result;
+    try {
+      await apiRegister(nom, email, pwd);
+      result = { success: true };
+    } catch(err) {
+      result = { success: false, error: err.message };
+    }
+
+    if (result && result.success) {
+      activateStep(3);
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Compte créé !';
+      btn.style.background = 'linear-gradient(135deg,#1b5e20,#2e7d32)';
+      showToast('🎉 Bienvenue ' + nom + ' ! Votre compte a été créé.', 'success');
+      setTimeout(() => {
+        document.body.style.opacity = '0';
+        setTimeout(() => window.location.href = 'profil.html', 350);
+      }, 800);
+    } else {
+      btn.disabled  = false;
+      btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> CRÉER MON COMPTE';
+      setField('group-email', 'err-email', result.error || 'Erreur lors de l\'inscription.');
+    }
+  });
+
+  // Vérif confirmation en live
+  document.getElementById('inp-confirm').addEventListener('input', function() {
+    const pwd = document.getElementById('inp-pwd').value;
+    if (this.value) setField('group-confirm', 'err-confirm',
+      this.value !== pwd ? 'Les mots de passe ne correspondent pas.' : '');
+  });
+</script>
+</body>
+</html>

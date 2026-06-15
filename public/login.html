@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATL Shop — Connexion</title>
+  <link rel="icon" href="https://placehold.co/32x32/c92a2a/fff?text=A" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+<div class="login-card" role="main">
+  <div class="login-brand">
+    <a href="index.html" style="text-decoration:none;">
+      <div style="font-family:'Syne',sans-serif;font-size:42px;font-weight:800;background:linear-gradient(135deg,#c92a2a,#e0692e);-webkit-background-clip:text;background-clip:text;color:transparent;">ATL</div>
+    </a>
+    <p>SHOP — Connexion</p>
+  </div>
+  <div id="login-error" class="login-error" role="alert"></div>
+  <form id="login-form" novalidate>
+    <div style="position:relative;">
+      <i class="fa-solid fa-user" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.3);font-size:14px;"></i>
+      <input type="text" id="inp-login" class="login-input" style="padding-left:44px;"
+             placeholder="Identifiant ou email" autocomplete="username" aria-label="Identifiant" required>
+    </div>
+    <div style="position:relative;margin-top:0;">
+      <i class="fa-solid fa-lock" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.3);font-size:14px;"></i>
+      <input type="password" id="inp-pwd" class="login-input" style="padding-left:44px;"
+             placeholder="Mot de passe" autocomplete="current-password" aria-label="Mot de passe" required>
+      <button type="button" id="toggle-pwd" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:14px;">
+        <i class="fa-solid fa-eye"></i>
+      </button>
+    </div>
+    <button type="submit" class="login-btn" id="login-btn">
+      <i class="fa-solid fa-right-to-bracket"></i> SE CONNECTER
+    </button>
+  </form>
+  <div class="login-links">
+    <a href="#">Mot de passe oublié ?</a>
+    <a href="index.html"><i class="fa-solid fa-house"></i> Accueil</a>
+  </div>
+  <div style="text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.4);">
+    Pas encore de compte ? <a href="register.html" style="color:#e0692e;font-weight:600;">Créer un compte</a>
+  </div>
+</div>
+<script src="js/api.js"></script>
+<script>
+  if (isLoggedIn()) window.location.href = 'index.html';
+
+  document.getElementById('toggle-pwd').addEventListener('click', function() {
+    const inp = document.getElementById('inp-pwd');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    this.querySelector('i').className = inp.type === 'password' ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+  });
+
+  document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const login    = document.getElementById('inp-login').value.trim();
+    const password = document.getElementById('inp-pwd').value;
+    const errDiv   = document.getElementById('login-error');
+    const btn      = document.getElementById('login-btn');
+    const card     = document.querySelector('.login-card');
+    errDiv.style.display = 'none';
+
+    if (!login || !password) {
+      errDiv.textContent = '⚠️ Veuillez remplir tous les champs.';
+      errDiv.style.display = 'block'; return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Vérification…';
+
+    try {
+      await apiLogin(login, password);
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Connecté !';
+      btn.style.background = 'linear-gradient(135deg,#1b5e20,#2e7d32)';
+      setTimeout(() => { document.body.style.opacity='0'; setTimeout(()=>window.location.href='index.html',350); }, 600);
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> SE CONNECTER';
+      errDiv.textContent = '❌ ' + (err.message || 'Identifiant ou mot de passe incorrect.');
+      errDiv.style.display = 'block';
+      // Shake animation
+      [0,8,-6,4,-2,0].forEach((x,i) => setTimeout(()=>card.style.transform=`translateX(${x}px)`,i*70));
+    }
+  });
+</script>
+</body>
+</html>

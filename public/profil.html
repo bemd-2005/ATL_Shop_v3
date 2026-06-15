@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATL Shop — Mon Profil</title>
+  <link rel="icon" href="https://placehold.co/32x32/c92a2a/fff?text=A" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .profil-page{max-width:960px;margin:0 auto;padding:36px 24px 80px;}
+    .profil-tabs{display:flex;gap:4px;margin-bottom:28px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:6px;box-shadow:var(--shadow);}
+    .tab-btn{flex:1;padding:10px 14px;border:none;border-radius:10px;background:transparent;color:var(--text-muted);font-size:14px;font-weight:600;font-family:var(--font-body);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .25s;}
+    .tab-btn.active{background:var(--gradient);color:#fff;}
+    .tab-btn:hover:not(.active){background:var(--border);}
+    .tab-panel{display:none;} .tab-panel.active{display:block;}
+    .profil-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);margin-bottom:20px;}
+    .profil-card h2{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--text);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+    .profil-card h2 i{color:var(--orange);}
+    .profil-avatar-wrap{display:flex;align-items:center;gap:20px;margin-bottom:24px;}
+    .profil-avatar{width:72px;height:72px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;font-family:var(--font-head);font-weight:800;flex-shrink:0;}
+    .profil-avatar-info h3{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--text);}
+    .profil-avatar-info span{font-size:13px;color:var(--text-muted);}
+    .role-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;background:linear-gradient(135deg,rgba(201,42,42,.15),rgba(224,105,46,.15));color:var(--orange);margin-left:8px;text-transform:uppercase;letter-spacing:.5px;}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .info-item label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);display:block;margin-bottom:4px;}
+    .info-item span{font-size:15px;font-weight:600;color:var(--text);}
+    .profil-field{margin-bottom:16px;}
+    .profil-field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:6px;}
+    .profil-input{width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;transition:all .25s;}
+    .profil-input:focus{border-color:var(--orange);background:var(--card-bg);}
+    .profil-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media(max-width:600px){.profil-row{grid-template-columns:1fr;}.info-grid{grid-template-columns:1fr;}}
+    .profil-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;}
+    .btn-save{background:var(--gradient);color:#fff;border:none;padding:11px 24px;border-radius:99px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:all .25s;display:flex;align-items:center;gap:7px;}
+    .btn-save:hover{opacity:.88;transform:translateY(-1px);}
+    .btn-secondary{background:transparent;color:var(--text-muted);border:1.5px solid var(--border);padding:11px 20px;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all .25s;display:flex;align-items:center;gap:7px;}
+    .btn-secondary:hover{border-color:var(--orange);color:var(--orange);}
+    .btn-danger{background:transparent;color:#ef4444;border:1.5px solid #fca5a5;padding:11px 20px;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all .25s;display:flex;align-items:center;gap:7px;}
+    .btn-danger:hover{background:#fee2e2;}
+    .order-item{border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;cursor:pointer;transition:all .25s;}
+    .order-item:hover{border-color:var(--orange);background:rgba(224,105,46,.04);}
+    .order-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .order-id{font-size:12px;font-weight:700;color:var(--text-muted);font-family:monospace;}
+    .order-date{font-size:12px;color:var(--text-muted);}
+    .order-total{font-family:var(--font-head);font-size:16px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+    .order-items-detail{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:none;}
+    .order-items-detail.open{display:block;}
+    .order-line{display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);padding:4px 0;}
+    .order-line span:last-child{font-weight:600;color:var(--text);}
+    .no-orders{text-align:center;padding:40px;color:var(--text-muted);}
+    .no-orders i{font-size:40px;margin-bottom:12px;display:block;}
+    .danger-zone{border:1.5px solid #fca5a5;border-radius:var(--radius);padding:20px 24px;margin-top:20px;}
+    .danger-zone h3{font-size:15px;font-weight:700;color:#ef4444;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+    .danger-zone p{font-size:13px;color:var(--text-muted);margin-bottom:14px;}
+    .inline-error{background:rgba(239,68,68,.15);color:#fca5a5;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;display:none;}
+    .status-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;text-transform:uppercase;}
+    .status-pending{background:rgba(234,179,8,.15);color:#ca8a04;}
+    .status-confirmed{background:rgba(59,130,246,.15);color:#2563eb;}
+    .status-shipped{background:rgba(168,85,247,.15);color:#7c3aed;}
+    .status-delivered{background:rgba(34,197,94,.15);color:#15803d;}
+    .status-cancelled{background:rgba(239,68,68,.15);color:#dc2626;}
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <img src="public/images/Atl logo.jpg" alt="logo" class="brand-logo">
+      <span class="brand-name">ATL SHOP</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+      <a href="services.html" class="nav-link"><i class="fa-solid fa-briefcase"></i> Services</a>
+      <a href="panier.html" class="nav-link"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <a href="login.html"    id="nav-login-link"    class="nav-link" style="display:none;color:#fff;"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+      <a href="register.html" id="nav-register-link" class="nav-link" style="display:none;color:#fff;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+      <span id="nav-user-greet" style="display:none;"></span>
+      <a href="profil.html"   id="nav-profil-link"   class="nav-link active" style="display:none;color:#fff;"><i class="fa-solid fa-user"></i> Mon profil</a>
+      <a href="admin.html"    id="nav-admin-link"    class="nav-link" style="display:none;color:var(--orange);"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+      <button id="nav-logout-btn" onclick="logout()" style="display:none;background:none;border:none;cursor:pointer;" class="nav-link"><i class="fa-solid fa-right-from-bracket"></i> Déco.</button>
+      <a href="panier.html" class="cart-nav-btn"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cart-badge-nav">0</span></a>
+      <button class="dark-toggle" id="dark-toggle"><i class="fa-solid fa-moon"></i></button>
+      <button class="burger-btn" id="burger-btn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+    <a href="profil.html" class="nav-link active" id="mobile-profil-link"><i class="fa-solid fa-user"></i> Mon Profil</a>
+    <a href="login.html" class="nav-link" id="mobile-login-link" style="display:none;"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+    <a href="register.html" class="nav-link" id="mobile-register-link" style="display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+    <a href="admin.html" class="nav-link" id="mobile-admin-link" style="display:none;"><i class="fa-solid fa-shield-halved"></i> Admin</a>
+    <button onclick="logout()" class="nav-link" id="mobile-logout-link" style="background:none;border:none;cursor:pointer;display:none;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+  </div>
+</nav>
+
+<main><div class="profil-page">
+  <div class="profil-tabs" role="tablist">
+    <button class="tab-btn active" data-tab="infos"     onclick="switchTab('infos')"><i class="fa-solid fa-user"></i> Mon profil</button>
+    <button class="tab-btn"        data-tab="securite"  onclick="switchTab('securite')"><i class="fa-solid fa-shield"></i> Sécurité</button>
+    <button class="tab-btn"        data-tab="commandes" onclick="switchTab('commandes')"><i class="fa-solid fa-box"></i> Commandes</button>
+  </div>
+
+  <!-- INFOS -->
+  <div class="tab-panel active" id="panel-infos">
+    <div class="profil-card">
+      <div class="profil-avatar-wrap">
+        <div class="profil-avatar" id="avatar-initials">?</div>
+        <div class="profil-avatar-info">
+          <h3 id="display-nom">—</h3>
+          <span id="display-email">—</span>
+          <span class="role-badge" id="display-role">client</span>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-item"><label>Membre depuis</label><span id="display-date">—</span></div>
+        <div class="info-item"><label>Identifiant</label><span id="display-username">—</span></div>
+      </div>
+    </div>
+    <div class="profil-card">
+      <h2><i class="fa-solid fa-pen"></i> Modifier mes informations</h2>
+      <div id="edit-error" class="inline-error"></div>
+      <div class="profil-row">
+        <div class="profil-field"><label for="edit-nom">Nom complet</label><input type="text" id="edit-nom" class="profil-input" placeholder="Votre nom"></div>
+        <div class="profil-field"><label for="edit-email">Email</label><input type="email" id="edit-email" class="profil-input" placeholder="votre@email.com"></div>
+      </div>
+      <div class="profil-actions">
+        <button class="btn-save" id="btn-save-profil"><i class="fa-solid fa-floppy-disk"></i> Enregistrer</button>
+        <button class="btn-secondary" id="btn-cancel-edit"><i class="fa-solid fa-xmark"></i> Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SÉCURITÉ -->
+  <div class="tab-panel" id="panel-securite">
+    <div class="profil-card">
+      <h2><i class="fa-solid fa-lock"></i> Changer le mot de passe</h2>
+      <div id="pwd-error" class="inline-error"></div>
+      <div class="profil-field" style="max-width:420px;"><label>Mot de passe actuel</label><input type="password" id="old-pwd" class="profil-input" placeholder="••••••••"></div>
+      <div class="profil-field" style="max-width:420px;"><label>Nouveau mot de passe</label><input type="password" id="new-pwd" class="profil-input" placeholder="•••••••• (min 6)"></div>
+      <div class="profil-field" style="max-width:420px;"><label>Confirmer</label><input type="password" id="confirm-pwd" class="profil-input" placeholder="••••••••"></div>
+      <div class="profil-actions"><button class="btn-save" id="btn-change-pwd"><i class="fa-solid fa-key"></i> Mettre à jour</button></div>
+    </div>
+    <div class="danger-zone">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> Zone de danger</h3>
+      <p>La suppression de votre compte est <strong>irréversible</strong>. Toutes vos données seront effacées.</p>
+      <button class="btn-danger" id="btn-delete-account"><i class="fa-solid fa-trash"></i> Supprimer mon compte</button>
+    </div>
+  </div>
+
+  <!-- COMMANDES -->
+  <div class="tab-panel" id="panel-commandes">
+    <div class="profil-card">
+      <h2><i class="fa-solid fa-box-open"></i> Mes commandes</h2>
+      <div id="orders-list"><div class="no-orders"><i class="fa-solid fa-spinner fa-spin"></i><p>Chargement…</p></div></div>
+    </div>
+  </div>
+</div></main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><h3>ATL SHOP</h3><p>Votre partenaire en équipements professionnels.</p></div>
+    <div class="footer-col"><h4>Navigation</h4><a href="index.html">Accueil</a><a href="services.html">Services</a><a href="panier.html">Panier</a></div>
+    <div class="footer-col"><h4>Mon compte</h4><a href="profil.html">Mon Profil</a><a href="register.html">Créer un compte</a></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 ATL SHOP — Tous droits réservés</p></div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/panier.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // ── Protection ────────────────────────────────────────────
+  if (!isLoggedIn()) { document.body.style.opacity='0'; window.location.replace('login.html'); }
+
+  let currentUser = null;
+
+  function formatPrice(p) { return new Intl.NumberFormat('fr-FR').format(p)+' FCFA'; }
+  function formatDate(d)  { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); }
+
+  // ── Remplir profil ────────────────────────────────────────
+  async function fillProfile() {
+    try {
+      currentUser = await apiGetMe();
+      const initials = currentUser.nom.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+      document.getElementById('avatar-initials').textContent = initials;
+      document.getElementById('display-nom').textContent      = currentUser.nom;
+      document.getElementById('display-email').textContent    = currentUser.email;
+      document.getElementById('display-role').textContent     = currentUser.role;
+      document.getElementById('display-username').textContent = currentUser.username;
+      document.getElementById('display-date').textContent     = formatDate(currentUser.created_at);
+      document.getElementById('edit-nom').value   = currentUser.nom;
+      document.getElementById('edit-email').value = currentUser.email;
+    } catch { window.location.href='login.html'; }
+  }
+
+  // ── Tabs ──────────────────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===name));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id==='panel-'+name));
+    if (name==='commandes') renderOrders();
+  }
+
+  // ── Modifier profil ───────────────────────────────────────
+  document.getElementById('btn-save-profil').addEventListener('click', async () => {
+    const nom   = document.getElementById('edit-nom').value.trim();
+    const email = document.getElementById('edit-email').value.trim();
+    const errEl = document.getElementById('edit-error');
+    errEl.style.display='none';
+    if (!nom||!email) { errEl.textContent='Nom et email sont requis.'; errEl.style.display='block'; return; }
+    try {
+      await apiUpdateMe({nom, email});
+      showToast('✅ Profil mis à jour !','success');
+      invalidateUserCache();
+      fillProfile(); updateAuthUI();
+    } catch(err) { errEl.textContent=err.message; errEl.style.display='block'; }
+  });
+  document.getElementById('btn-cancel-edit').addEventListener('click', fillProfile);
+
+  // ── Changer mot de passe ──────────────────────────────────
+  document.getElementById('btn-change-pwd').addEventListener('click', async () => {
+    const oldPassword = document.getElementById('old-pwd').value;
+    const newPassword = document.getElementById('new-pwd').value;
+    const confirm     = document.getElementById('confirm-pwd').value;
+    const errEl       = document.getElementById('pwd-error');
+    errEl.style.display='none';
+    if (!oldPassword||!newPassword||!confirm) { errEl.textContent='Tous les champs sont requis.'; errEl.style.display='block'; return; }
+    if (newPassword!==confirm) { errEl.textContent='Les mots de passe ne correspondent pas.'; errEl.style.display='block'; return; }
+    try {
+      await apiChangePassword(oldPassword, newPassword);
+      showToast('🔑 Mot de passe mis à jour !','success');
+      document.getElementById('old-pwd').value='';
+      document.getElementById('new-pwd').value='';
+      document.getElementById('confirm-pwd').value='';
+    } catch(err) { errEl.textContent=err.message; errEl.style.display='block'; }
+  });
+
+  // ── Supprimer compte ──────────────────────────────────────
+  document.getElementById('btn-delete-account').addEventListener('click', async () => {
+    if (!confirm('⚠️ Supprimer définitivement votre compte ? Action irréversible.')) return;
+    try { await apiDeleteMe(); showToast('Compte supprimé.','info'); setTimeout(apiLogout,800); }
+    catch(err) { showToast('❌ '+err.message,'error'); }
+  });
+
+  // ── Commandes ─────────────────────────────────────────────
+  async function renderOrders() {
+    const el = document.getElementById('orders-list');
+    el.innerHTML='<div class="no-orders"><i class="fa-solid fa-spinner fa-spin"></i><p>Chargement…</p></div>';
+    try {
+      const orders = await apiGetMyOrders();
+      if (!orders.length) { el.innerHTML='<div class="no-orders"><i class="fa-solid fa-box-open" style="color:#ccc;"></i><p>Aucune commande.</p><a href="index.html" class="btn-save" style="display:inline-flex;margin-top:14px;text-decoration:none;"><i class="fa-solid fa-store"></i> Catalogue</a></div>'; return; }
+      el.innerHTML = orders.map(o => `
+        <div class="order-item" onclick="toggleDetail('${o.id}')">
+          <div class="order-head">
+            <div><div class="order-id">#${String(o.id).padStart(6,'0')}</div><div class="order-date">${formatDate(o.created_at)}</div></div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="status-badge status-${o.status}">${o.status}</span>
+              <div class="order-total">${formatPrice(o.total)}</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+            <i class="fa-solid fa-box" style="color:var(--orange);margin-right:5px;"></i>
+            ${(o.items||[]).reduce((s,i)=>s+i.quantity,0)} article(s)
+            <i class="fa-solid fa-chevron-down" id="chev-${o.id}" style="margin-left:8px;color:var(--orange);transition:transform .25s;"></i>
+          </div>
+          <div class="order-items-detail" id="detail-${o.id}">
+            ${(o.items||[]).map(i=>`<div class="order-line"><span>${i.nom_produit} × ${i.quantity}</span><span>${formatPrice(i.price_at_time*i.quantity)}</span></div>`).join('')}
+            <div class="order-line" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-weight:700;">
+              <span style="color:var(--text);">Total</span><span style="color:var(--orange);">${formatPrice(o.total)}</span>
+            </div>
+          </div>
+        </div>`).join('');
+    } catch(err) { el.innerHTML=`<p style="color:var(--text-muted);text-align:center;padding:20px;">${err.message}</p>`; }
+  }
+
+  function toggleDetail(id) {
+    const d=document.getElementById('detail-'+id), c=document.getElementById('chev-'+id);
+    d.classList.toggle('open'); c.style.transform=d.classList.contains('open')?'rotate(180deg)':'';
+  }
+
+  // ── Dark + burger ─────────────────────────────────────────
+  (function(){
+    const t=document.getElementById('dark-toggle');
+    if(localStorage.getItem('atl_dark')==='true'){document.body.classList.add('dark');if(t)t.innerHTML='<i class="fa-solid fa-sun"></i>';}
+    if(t)t.addEventListener('click',()=>{document.body.classList.toggle('dark');localStorage.setItem('atl_dark',document.body.classList.contains('dark'));t.innerHTML=document.body.classList.contains('dark')?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';});
+    const b=document.getElementById('burger-btn'),m=document.getElementById('mobile-menu');
+    if(b&&m)b.addEventListener('click',()=>{m.classList.toggle('open');b.classList.toggle('active');});
+  })();
+
+  document.addEventListener('DOMContentLoaded', fillProfile);
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATL Shop — Mon Panier</title>
+  <link rel="icon" href="/images/logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <img src="/images/logo.png" alt="ATL Shop logo" class="brand-logo" onerror="this.src='https://placehold.co/40x40/c92a2a/fff?text=A'">
+      <span class="brand-name">ATL SHOP</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+      <a href="services.html" class="nav-link"><i class="fa-solid fa-briefcase"></i> Services</a>
+      <a href="panier.html"   class="nav-link active"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <a href="login.html"    id="nav-login-link"    class="nav-link" style="color:#fff;"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+      <a href="register.html" id="nav-register-link" class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+      <span id="nav-user-greet" style="display:none;"></span>
+      <a href="profil.html" id="nav-profil-link" class="nav-link" style="color:#fff;display:none;"><i class="fa-solid fa-user"></i> Mon profil</a>
+      <button id="nav-logout-btn" onclick="logout()" style="display:none;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+      <a href="panier.html" class="cart-nav-btn" aria-label="Panier">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cart-badge-nav">0</span>
+      </a>
+      <button class="dark-toggle" id="dark-toggle" aria-label="Thème sombre">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="burger-btn" id="burger-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html"    class="nav-link"><i class="fa-solid fa-house"></i> Accueil</a>
+    <a href="services.html" class="nav-link"><i class="fa-solid fa-briefcase"></i> Services</a>
+    <a href="panier.html"   class="nav-link active"><i class="fa-solid fa-cart-shopping"></i> Panier</a>
+    <a href="login.html"    class="nav-link" id="mobile-login-link"><i class="fa-solid fa-right-to-bracket"></i> Connexion</a>
+    <a href="register.html" class="nav-link" id="mobile-register-link" style="display:none;"><i class="fa-solid fa-user-plus"></i> S'inscrire</a>
+    <a href="profil.html"   class="nav-link" id="mobile-profil-link"   style="display:none;"><i class="fa-solid fa-user"></i> Mon Profil</a>
+    <button onclick="logout()" class="nav-link" id="mobile-logout-link" style="background:none;border:none;cursor:pointer;display:none;"><i class="fa-solid fa-right-from-bracket"></i> Déconnexion</button>
+  </div>
+</nav>
+
+<!-- PANIER -->
+<main>
+  <div class="panier-page">
+    <h1 class="panier-title"><i class="fa-solid fa-cart-shopping" style="color:var(--red);"></i> Mon Panier</h1>
+
+    <!-- Liste articles -->
+    <div id="panier-list"></div>
+
+    <!-- Résumé -->
+    <div id="panier-summary" class="panier-summary" style="display:none;">
+      <div class="panier-total">
+        <span>Total</span>
+        <span id="panier-total-amount">0 FCFA</span>
+      </div>
+      <div class="panier-actions">
+        <button class="btn-primary" id="btn-commander">
+          <i class="fa-brands fa-whatsapp"></i> Commander via WhatsApp
+        </button>
+        <button class="btn-outline" id="btn-vider">
+          <i class="fa-solid fa-trash"></i> Vider le panier
+        </button>
+        <a href="index.html" class="btn-outline" style="text-decoration:none;">
+          <i class="fa-solid fa-arrow-left"></i> Continuer
+        </a>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:14px;display:flex;align-items:center;gap:6px;">
+        <i class="fa-solid fa-circle-info"></i>
+        Vous serez redirigé vers WhatsApp pour confirmer et effectuer le paiement.
+      </p>
+    </div>
+
+    <!-- ── Écran de confirmation post-commande ── -->
+    <div id="panier-confirmation" style="display:none;text-align:center;padding:48px 20px;">
+      <div style="width:72px;height:72px;background:linear-gradient(135deg,#25d366,#128c7e);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;">
+        ✓
+      </div>
+      <h2 style="font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px;">
+        Commande enregistrée !
+      </h2>
+      <p style="color:var(--text-muted);font-size:15px;max-width:420px;margin:0 auto 28px;line-height:1.7;">
+        Votre commande <strong id="conf-order-num"></strong> a été créée avec succès.<br>
+        Cliquez sur le bouton ci-dessous pour finaliser le paiement sur WhatsApp.
+      </p>
+      <a id="btn-whatsapp" href="#" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;padding:14px 32px;border-radius:99px;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.35);transition:all .25s;">
+        <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i>
+        Confirmer & Payer sur WhatsApp
+      </a>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:16px;">
+        Le message avec le détail de votre commande est pré-rempli automatiquement.
+      </p>
+      <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="profil.html" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;">
+          <i class="fa-solid fa-box"></i> Voir mes commandes
+        </a>
+        <a href="index.html" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;">
+          <i class="fa-solid fa-store"></i> Retour au catalogue
+        </a>
+      </div>
+    </div>
+
+    <!-- Vide -->
+    <div id="panier-empty" class="panier-empty" style="display:none;">
+      <i class="fa-solid fa-cart-shopping" style="color:#ddd;"></i>
+      <h2 style="font-size:22px;margin-bottom:12px;color:var(--text-muted);">Votre panier est vide</h2>
+      <p style="color:var(--text-muted);margin-bottom:24px;">Parcourez notre catalogue et ajoutez des produits.</p>
+      <a href="index.html" class="btn-primary" style="display:inline-flex;text-decoration:none;">
+        <i class="fa-solid fa-store"></i> Voir le catalogue
+      </a>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER simplifié -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ATL SHOP</h3>
+      <p>Votre partenaire en équipements professionnels.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="index.html">Accueil</a>
+      <a href="services.html">Nos Services</a>
+      <a href="login.html">Connexion</a>
+      <a href="register.html">Créer un compte</a>
+      <a href="profil.html">Mon Profil</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+237600000000"><i class="fa-solid fa-phone" style="margin-right:6px;"></i>+237 600 000 000</a>
+      <a href="mailto:contact@atlsarl.cm"><i class="fa-solid fa-envelope" style="margin-right:6px;"></i>contact@atlsarl.cm</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2025 ATL SHOP — Tous droits réservés</p></div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/panier.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  function formatPrice(p) {
+    return new Intl.NumberFormat('fr-FR').format(p) + ' FCFA';
+  }
+
+  function renderPanier() {
+    const cart  = getCart();
+    const list  = document.getElementById('panier-list');
+    const sumEl = document.getElementById('panier-summary');
+    const emptyEl = document.getElementById('panier-empty');
+
+    if (!cart.items.length) {
+      list.innerHTML = '';
+      sumEl.style.display  = 'none';
+      emptyEl.style.display = 'block';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+    sumEl.style.display   = 'block';
+
+    list.innerHTML = cart.items.map(item => `
+      <div class="panier-item" id="item-${item.id}">
+        <img src="${item.image}" alt="${item.name}" onerror="this.src='https://placehold.co/80x70/1a1a2e/888?text=ATL'">
+        <div>
+          <div class="panier-item-name">${item.name}</div>
+          <div class="panier-item-price">${formatPrice(item.price)} / unité</div>
+        </div>
+        <input
+          type="number" class="qty-input" min="1" value="${item.quantity}"
+          onchange="handleQtyChange(${item.id}, this.value)"
+          aria-label="Quantité de ${item.name}"
+        >
+        <div class="line-total">${formatPrice(item.price * item.quantity)}</div>
+        <button class="btn-remove" onclick="handleRemove(${item.id})" aria-label="Supprimer ${item.name}">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    `).join('');
+
+    document.getElementById('panier-total-amount').textContent = formatPrice(cart.total);
+  }
+
+  function handleQtyChange(id, val) {
+    updateQuantity(id, parseInt(val, 10));
+    renderPanier();
+  }
+
+  function handleRemove(id) {
+    removeFromCart(id);
+    showToast('🗑️ Produit retiré du panier', 'info');
+    renderPanier();
+  }
+
+  document.getElementById('btn-vider').addEventListener('click', () => {
+    if (confirm('Vider le panier ? Cette action est irréversible.')) {
+      clearCart();
+      renderPanier();
+    }
+  });
+
+  document.getElementById('btn-commander').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-commander');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Traitement…';
+
+    const result = await passerCommande();
+
+    if (result && result.success) {
+      // Afficher l'écran de confirmation
+      document.getElementById('panier-summary').style.display = 'none';
+      document.getElementById('panier-list').style.display    = 'none';
+
+      const confScreen = document.getElementById('panier-confirmation');
+      const orderNum   = String(result.order.id).padStart(6, '0');
+      document.getElementById('conf-order-num').textContent = '#' + orderNum;
+
+      // Configurer le lien WhatsApp
+      if (result.whatsapp_url) {
+        document.getElementById('btn-whatsapp').href = result.whatsapp_url;
+      }
+
+      confScreen.style.display = 'block';
+
+      // Rediriger automatiquement vers WhatsApp après 2 secondes
+      if (result.whatsapp_url) {
+        showToast('🎉 Commande créée ! Redirection vers WhatsApp…', 'success');
+        setTimeout(() => {
+          window.open(result.whatsapp_url, '_blank', 'noopener');
+        }, 2000);
+      }
+
+      // Mettre à jour le panier affiché
+      setTimeout(renderPanier, 100);
+
+    } else {
+      // Réactiver le bouton en cas d'échec
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Commander via WhatsApp';
+    }
+  });
+
+  // Dark mode minimal
+  (function(){
+    const t = document.getElementById('dark-toggle');
+    if (localStorage.getItem('atl_dark') === 'true') { document.body.classList.add('dark'); if(t) t.innerHTML='<i class="fa-solid fa-sun"></i>'; }
+    if (t) t.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('atl_dark', document.body.classList.contains('dark'));
+      t.innerHTML = document.body.classList.contains('dark') ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+    // burger
+    const b = document.getElementById('burger-btn'), m = document.getElementById('mobile-menu');
+    if(b && m) b.addEventListener('click', () => { m.classList.toggle('open'); b.classList.toggle('active'); });
+  })();
+
+  document.addEventListener('DOMContentLoaded', renderPanier);
+</script>
+</body>
+</html>
