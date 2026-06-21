@@ -11,7 +11,7 @@ if (!fs.existsSync(dbPath)) {
     try {
         execSync('node server/db/init.js', { 
             studio: 'inherit',
-            cwd: path.resolve(__dirname, '../')
+            cwd: process.cwd()
     });
     console.log('Base de données initialisée avec succès.');
     } catch (error) {
