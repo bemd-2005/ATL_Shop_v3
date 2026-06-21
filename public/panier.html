@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ATL Shop — Mon Panier</title>
-  <link rel="icon" href="https://placehold.co/32x32/c92a2a/fff?text=A" type="image/png">
+  <link rel="icon" href="/images/logo.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,7 +14,7 @@
 <nav class="navbar" role="navigation">
   <div class="navbar-inner">
     <a href="index.html" class="navbar-brand">
-      <img src="/images/logo.jpg" alt="ATL Shop logo" class="brand-logo">
+      <img src="/images/logo.jpg" alt="ATL Shop logo" class="brand-logo" onerror="this.src='https://placehold.co/40x40/c92a2a/fff?text=A'">
       <span class="brand-name">ATL SHOP</span>
     </a>
     <div class="nav-links">
@@ -67,13 +67,47 @@
       </div>
       <div class="panier-actions">
         <button class="btn-primary" id="btn-commander">
-          <i class="fa-solid fa-check-circle"></i> Passer la commande
+          <i class="fa-brands fa-whatsapp"></i> Commander via WhatsApp
         </button>
         <button class="btn-outline" id="btn-vider">
           <i class="fa-solid fa-trash"></i> Vider le panier
         </button>
         <a href="index.html" class="btn-outline" style="text-decoration:none;">
           <i class="fa-solid fa-arrow-left"></i> Continuer
+        </a>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:14px;display:flex;align-items:center;gap:6px;">
+        <i class="fa-solid fa-circle-info"></i>
+        Vous serez redirigé vers WhatsApp pour confirmer et effectuer le paiement.
+      </p>
+    </div>
+
+    <!-- ── Écran de confirmation post-commande ── -->
+    <div id="panier-confirmation" style="display:none;text-align:center;padding:48px 20px;">
+      <div style="width:72px;height:72px;background:linear-gradient(135deg,#25d366,#128c7e);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;">
+        ✓
+      </div>
+      <h2 style="font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text);margin-bottom:10px;">
+        Commande enregistrée !
+      </h2>
+      <p style="color:var(--text-muted);font-size:15px;max-width:420px;margin:0 auto 28px;line-height:1.7;">
+        Votre commande <strong id="conf-order-num"></strong> a été créée avec succès.<br>
+        Cliquez sur le bouton ci-dessous pour finaliser le paiement sur WhatsApp.
+      </p>
+      <a id="btn-whatsapp" href="#" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;padding:14px 32px;border-radius:99px;font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.35);transition:all .25s;">
+        <i class="fa-brands fa-whatsapp" style="font-size:20px;"></i>
+        Confirmer & Payer sur WhatsApp
+      </a>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:16px;">
+        Le message avec le détail de votre commande est pré-rempli automatiquement.
+      </p>
+      <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="profil.html" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;">
+          <i class="fa-solid fa-box"></i> Voir mes commandes
+        </a>
+        <a href="index.html" class="btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:7px;">
+          <i class="fa-solid fa-store"></i> Retour au catalogue
         </a>
       </div>
     </div>
@@ -108,7 +142,7 @@
     <div class="footer-col">
       <h4>Contact</h4>
       <a href="tel:+237695100878"><i class="fa-solid fa-phone" style="margin-right:6px;"></i>+237 695 100 878</a>
-      <a href="mailto:contact@afrikaans.cm"><i class="fa-solid fa-envelope" style="margin-right:6px;"></i>contact@afrikaans.cm</a>
+      <a href="mailto:contact@afrikaan.cm"><i class="fa-solid fa-envelope" style="margin-right:6px;"></i>contact@afrikaans.cm</a>
     </div>
   </div>
   <div class="footer-bottom"><p>&copy; 2026 ATL SHOP — Tous droits réservés</p></div>
@@ -179,8 +213,44 @@
   });
 
   document.getElementById('btn-commander').addEventListener('click', async () => {
-    const ok = await passerCommande();
-    if (ok) setTimeout(renderPanier, 400);
+    const btn = document.getElementById('btn-commander');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Traitement…';
+
+    const result = await passerCommande();
+
+    if (result && result.success) {
+      // Afficher l'écran de confirmation
+      document.getElementById('panier-summary').style.display = 'none';
+      document.getElementById('panier-list').style.display    = 'none';
+
+      const confScreen = document.getElementById('panier-confirmation');
+      const orderNum   = String(result.order.id).padStart(6, '0');
+      document.getElementById('conf-order-num').textContent = '#' + orderNum;
+
+      // Configurer le lien WhatsApp
+      if (result.whatsapp_url) {
+        document.getElementById('btn-whatsapp').href = result.whatsapp_url;
+      }
+
+      confScreen.style.display = 'block';
+
+      // Rediriger automatiquement vers WhatsApp après 2 secondes
+      if (result.whatsapp_url) {
+        showToast('🎉 Commande créée ! Redirection vers WhatsApp…', 'success');
+        setTimeout(() => {
+          window.open(result.whatsapp_url, '_blank', 'noopener');
+        }, 2000);
+      }
+
+      // Mettre à jour le panier affiché
+      setTimeout(renderPanier, 100);
+
+    } else {
+      // Réactiver le bouton en cas d'échec
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Commander via WhatsApp';
+    }
   });
 
   // Dark mode minimal
