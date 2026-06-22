@@ -4,7 +4,7 @@
   "description": "ATL Shop — Backend Node.js + Express + SQLite",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/db/init.js && node server/index.js",
+    "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "init-db": "node server/db/init.js"
   },
