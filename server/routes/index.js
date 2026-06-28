@@ -27,6 +27,8 @@ router.get   ('/products/:id', optionalAuth, products.getOne);
 router.post  ('/products',     requireAuth, requireAdmin, upload.single('image'), products.create);
 router.put   ('/products/:id', requireAuth, requireAdmin, upload.single('image'), products.update);
 router.delete('/products/:id', requireAuth, requireAdmin, products.remove);
+router.delete('/products/:id/permanent', requireAuth, requireAdmin, products.destroy);
+
 
 // ── Catégories ────────────────────────────────────────────
 router.get   ('/categories',     cats.getAll);

@@ -19,7 +19,7 @@ if (!fs.existsSync(DB_PATH)) {
 // ── Middlewares ──────────────────────────────────────────
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? ['https://votre-domaine.cm']         // Adapter en prod
+    ? ['https://atlshopv3-production.up;railway.app']         // Adapter en prod
     : '*',
   credentials: true
 }));

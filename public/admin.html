@@ -500,9 +500,13 @@ async function loadProducts() {
           <button class="btn-sm btn-warning-sm" onclick="openEditProduct(${p.id})" title="Modifier">
             <i class="fa-solid fa-pen"></i> Modifier
           </button>
-          <button class="btn-sm btn-danger-sm" onclick="deleteProduct(${p.id},'${esc(p.nom).replace(/'/g,"\\'")}')">
+          <button class="btn-sm btn-warning-sm" onclick="deleteProduct(${p.id},'${esc(p.nom).replace(/'/g,"\\'")}')">
             <i class="fa-solid fa-eye-slash"></i> Masquer
-          </button>
+            </button>
+            <button class="btn-sm btn-danger-sm" onclick="destroyProduct(${p.id},'${esc(p.nom).replace(/'/g,"\\'")}')">
+              <i class="fa-solid fa-trash"></i> Supprimer
+              </button>
+
         </td>
       </tr>`).join('');
   } catch(err) {
@@ -619,6 +623,15 @@ async function deleteProduct(id, nom) {
   if (!confirm(`Masquer le produit "${nom}" ?`)) return;
   try { await apiDeleteProduct(id); showToast('Produit masqué.','info'); loadProducts(); }
   catch(err) { showToast('❌ '+err.message,'error'); }
+}
+
+async function destroyProduct(id, nom) {
+  if (!confirm(`⚠️ Supprimer DÉFINITIVEMENT "${nom}" ? Action irréversible.`)) return;
+  try {
+    await apiFetch('/products/' + id + '/permanent', { method:'DELETE', headers:authHeaders() });
+    showToast('🗑️ Produit supprimé définitivement.', 'info');
+    loadProducts();
+  } catch(err) { showToast('❌ ' + err.message, 'error'); }
 }
 
 // ── Catégories ────────────────────────────────────────────

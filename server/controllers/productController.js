@@ -111,3 +111,13 @@ exports.remove = (req, res) => {
   db.prepare('UPDATE products SET visible = 0 WHERE id = ?').run(req.params.id);
   res.json({ message: 'Produit masqué (soft delete).' });
 };
+
+// DELETE définitif /api/products/:id/permanent (admin)
+exports.destroy = (req, res) => {
+  const product = db.prepare('SELECT id FROM products WHERE id = ?').get(req.params.id);
+  if (!product) return res.status(404).json({ error: 'Produit introuvable.' });
+  db.prepare('DELETE FROM products WHERE id = ?').run(req.params.id);
+  res.json({ message: 'Produit supprimé définitivement.' });
+};
+
+

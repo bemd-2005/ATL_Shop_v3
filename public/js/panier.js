@@ -1,4 +1,4 @@
-/* public/js/panier.js — Panier localStorage + commande API */
+/* public/js/panier.js — Panier localStorage + commande API + WhatsApp */
 
 const CART_KEY = 'atl_cart';
 
@@ -24,29 +24,37 @@ function addToCart(product) {
   if (ex) ex.quantity += 1;
   else cart.items.push({...product, quantity:1});
   saveCart(cart);
-  showToast(`${product.name} ajouté au panier !`, 'success');
+  showToast(`✅ ${product.name} ajouté au panier !`, 'success');
   animateBadge();
 }
 
-function removeFromCart(id)        { const c=getCart(); c.items=c.items.filter(i=>i.id!==id); saveCart(c); }
-function updateQuantity(id, qty)   { const c=getCart(); const it=c.items.find(i=>i.id===id); if(!it)return; if(qty<=0){removeFromCart(id);return;} it.quantity=qty; saveCart(c); }
-function clearCart()               { saveCart({items:[],total:0}); }
+function removeFromCart(id)      { const c=getCart(); c.items=c.items.filter(i=>i.id!==id); saveCart(c); }
+function updateQuantity(id, qty) { const c=getCart(); const it=c.items.find(i=>i.id===id); if(!it)return; if(qty<=0){removeFromCart(id);return;} it.quantity=qty; saveCart(c); }
+function clearCart()             { saveCart({items:[],total:0}); }
 
-// ── Passer la commande via API ────────────────────────────
+// ── Passer la commande ────────────────────────────────────
+// Retourne { success, whatsapp_url } ou false
 async function passerCommande() {
   const cart = getCart();
-  if (!cart.items.length) { showToast('⚠️ Votre panier est vide.', 'warning'); return false; }
-  if (!isLoggedIn())      { showToast('⚠️ Connectez-vous pour passer commande.', 'warning'); setTimeout(()=>window.location.href='login.html',1400); return false; }
+  if (!cart.items.length) {
+    showToast('⚠️ Votre panier est vide.', 'warning');
+    return false;
+  }
+  if (!isLoggedIn()) {
+    showToast('⚠️ Connectez-vous pour passer commande.', 'warning');
+    setTimeout(() => window.location.href = 'login.html', 1400);
+    return false;
+  }
 
   try {
-    await apiPlaceOrder(cart.items.map(i => ({
+    const result = await apiPlaceOrder(cart.items.map(i => ({
       id: i.id, name: i.name, price: i.price, quantity: i.quantity
     })));
-    showToast(' Commande passée avec succès ! Nous vous contacterons.', 'success');
+
     clearCart();
-    return true;
+    return { success: true, whatsapp_url: result.whatsapp_url, order: result };
   } catch (err) {
-    showToast(' ' + (err.message || 'Erreur lors de la commande.'), 'error');
+    showToast('❌ ' + (err.message || 'Erreur lors de la commande.'), 'error');
     return false;
   }
 }
@@ -70,7 +78,7 @@ function showToast(message, type='success') {
   const t = document.createElement('div');
   t.style.cssText = `background:${colors[type]||colors.info};color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);transform:translateX(120%);transition:transform .35s cubic-bezier(.34,1.56,.64,1);max-width:280px;cursor:pointer;pointer-events:all;`;
   t.textContent = message;
-  const timer = setTimeout(()=>dismiss(t), 3500);
+  const timer = setTimeout(()=>dismiss(t), 4000);
   t.addEventListener('click', ()=>dismiss(t));
   c.appendChild(t);
   requestAnimationFrame(()=> t.style.transform = 'translateX(0)');
